@@ -32,14 +32,24 @@ app.get('/', (req, res) => {
     res.render('home');
 })
 
+app.get('/campspots', async (req, res) => {
+    const campspots = await Campspot.find({});
+    res.render('campspots/index', { campspots }) // campspots is how we render it inside index.js
+})
+
+app.get('/campspots/:id', async (req, res,) => {
+    const campspot = await Campspot.findById(req.params.id);
+    res.render('campspots/show', { campspot });
+})
+
 
 // recall async returns a promise that guarantees a resolve
-app.get('/makecampspot', async (req, res) => {
-    // Creating new camp spot. 
-    const camp = new Campspot({ title: 'New spot: Back yeard', description: 'Elite camping sites' });
-    await camp.save();
-    res.send(camp);
-})
+// app.get('/makecampspot', async (req, res) => {
+//     // Creating new camp spot. 
+//     const camp = new Campspot({ title: 'New spot: Back yeard', description: 'Elite camping sites' });
+//     await camp.save();
+//     res.send(camp);
+// })
 
 
 app.listen(3000, () => {
