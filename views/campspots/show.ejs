@@ -12,14 +12,24 @@
     <h1>
         <%= campspot.title %>
     </h1>
-
     <h2>
         <%= campspot.location %>
     </h2>
 
+    <p>
+        <a href="/campspots/<%= campspot._id %>/edit">Edit</a>
+    </p>
+
+    <p>
+        <!-- query string ?_method=DELETE  -->
+    <form action="/campspots/<%= campspot._id %>?_method=DELETE" method="POST">
+        <button>Delete</button>
+    </form>
+    </p>
+
     <footer>
-        <a href="/campspots/ <%= campspot._id%>/edit">Edit</a>
-        <a href="/campspots">All campspots :)</a>
+        <!-- <a href="/campspots/ <%= campspot._id%>/edit">Edit</a> -->
+        <a href="/campspots">Back to All campspots</a>
     </footer>
 </body>
 

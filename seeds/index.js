@@ -5,6 +5,8 @@ const cities = require('./cities');
 const { places, descriptors } = require('./seedHelpers');
 
 
+
+
 // =============================================================================
 // local development database. 
 // =============================================================================
@@ -13,6 +15,11 @@ mongoose.connect('mongodb://localhost:27017/main-base', {
     useCreateIndex: true,
     useUnifiedTopology: true
 });
+
+
+
+
+
 
 // =============================================================================
 // Tells us if we are connected. 
@@ -23,6 +30,9 @@ db.once("open", () => {
     console.log("We have successfully connected.\n")
 });
 // =============================================================================
+
+
+
 
 // pass in an array, return a random element from that array.
 const sample = array => array[Math.floor(Math.random() * array.length)];
