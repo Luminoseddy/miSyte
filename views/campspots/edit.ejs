@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit your campspot</title>
+</head>
+
+<body>
+    <h1>Editing Page</h1>
+    <!-- Sending EDIT request.  -->
+    <form action="/campspots/<%=campspot._id%>?_method=PUT" method="POST">
+        <div>
+            <label for="title">Title</label>
+            <!-- Everything under req.body will be stored in campspot title  -->
+            <input type="text" id="title" name="campspot[title]" value="<%= campspot.title %>">
+        </div>
+
+        <div>
+            <label for="location">Location</label>
+            <input type="text" id="location" name="campspot[location]" value="<%= campspot.location %>">
+        </div>
+        <button>Confirm</button>
+    </form>
+    <!-- Recall: index/campspots  -->
+    <a href="/campspots/<%= campspot._id%>">Back to campspot</a>
+</body>
+
+</html>
