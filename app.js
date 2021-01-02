@@ -45,6 +45,7 @@ app.post('/campspots', async (req, res) => {
     res.redirect(`/campspots/${campspot._id}`);
 })
 
+app.get('/campspots/new', (req, res) => {
     res.render('campspots/new');
 })
 
