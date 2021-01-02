@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Spots</title>
+</head>
+
+<body>
+    <!-- Sending POST request.  -->
+    <form action="/campspots" method="POST">
+        <div>
+            <label for="title">Title</label>
+            <!-- Everything under req.body will be stored in campspot title  -->
+            <input type="text" id="title" name="campspot[title]">
+        </div>
+
+        <div>
+            <label for="location">Location</label>
+            <input type="text" id="location" name="campspot[location]">
+        </div>
+        <button>Add campSpot</button>
+    </form>
+    <!-- Recall: index/campspots  -->
+    <a href="/campspots">List All Camps</a>
+</body>
+
+</html>

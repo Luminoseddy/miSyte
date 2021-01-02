@@ -27,6 +27,8 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+//Parse the body
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
     res.render('home');
@@ -37,10 +39,24 @@ app.get('/campspots', async (req, res) => {
     res.render('campspots/index', { campspots }) // campspots is how we render it inside index.js
 })
 
+app.post('/campspots', async (req, res) => {
+    const campspot = new Campspot(req.body.campspot); // empty by default.
+    await campspot.save();
+    res.redirect(`/campspots/${campspot._id}`);
+})
+
+    res.render('campspots/new');
+})
+
+
 app.get('/campspots/:id', async (req, res,) => {
     const campspot = await Campspot.findById(req.params.id);
     res.render('campspots/show', { campspot });
-})
+});
+
+
+
+
 
 
 // recall async returns a promise that guarantees a resolve
