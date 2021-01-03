@@ -7,6 +7,7 @@ const { places, descriptors } = require('./seedHelpers');
 
 
 
+
 // =============================================================================
 // local development database. 
 // =============================================================================
@@ -42,16 +43,21 @@ const seedDB = async () => {
 
     for (let i = 0; i < 50; i++) {
         const r = Math.floor(Math.random() * 1000);
+        const price = Math.floor(Math.random() * 20) + 10;
         const camp = new Campspot({
             location: `${cities[r].city}, ${cities[r].state}`,
-            title: `${sample(descriptors)} ${sample(places)}`
+            title: `${sample(descriptors)} ${sample(places)}`,
+            image: 'https://source.unsplash.com/collection/483251',
+            description: 'Testing for a long description',
+            price
         })
         await camp.save();
     }
 }
 
+
 // Recall its async type function, which returns a promise.
 // This automatically closes after execution. 
-// seedDB().then(() => {
-//     mongoose.connection.close();
-// })
+seedDB().then(() => {
+    mongoose.connection.close();
+})
