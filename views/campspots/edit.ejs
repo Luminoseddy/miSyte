@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit your campspot</title>
-</head>
-
-<body>
+<% layout('../layouts/boilerPlate') %>
     <h1>Editing Page</h1>
     <!-- Sending EDIT request.  -->
     <form action="/campspots/<%=campspot._id%>?_method=PUT" method="POST">
@@ -25,6 +16,3 @@
     </form>
     <!-- Recall: index/campspots  -->
     <a href="/campspots/<%= campspot._id %>">Back to campspot</a>
-</body>
-
-</html>
