@@ -1,18 +1,70 @@
 <% layout('../layouts/boilerPlate') %>
-    <h1>Editing Page</h1>
-    <!-- Sending EDIT request.  -->
-    <form action="/campspots/<%=campspot._id%>?_method=PUT" method="POST">
-        <div>
-            <label for="title">Title</label>
-            <!-- Everything under req.body will be stored in campspot title  -->
-            <input type="text" id="title" name="campspot[title]" value="<%= campspot.title %>">
-        </div>
-
-        <div>
-            <label for="location">Location</label>
-            <input type="text" id="location" name="campspot[location]" value="<%= campspot.location %>">
-        </div>
-        <button>Update</button>
-    </form>
     <!-- Recall: index/campspots  -->
     <a href="/campspots/<%= campspot._id %>">Back to campspot</a>
+
+    <div class="row">
+        <h1 class="text-center">Edit Mode: Camping Spots</h1>
+        <div class="col-6 offset-3">
+    
+            <!-- Sending POST request.  -->
+            <form action="/campspots/<%=campspot._id%>?_method=PUT" method="POST">
+                <div class="mb-3">
+                    <h5>Title</h5>
+                    <label class="form label" for="title"></label>
+                        <!-- Everything under req.body will be stored in campspot title  -->
+                        <input class="form control" type="text" id="title" name="campspot[title]" value="<%=campspot.title%>">
+                </label>
+                </div>
+    
+
+
+
+                <div class="mb-3">
+                    <h5>Location</h5>
+                    <label class="form label" for="location"></label>
+                    <input class="form control" type="text" id="location" name="campspot[location]" value="<%=campspot.location%>">
+                </div> 
+
+
+
+
+
+                <div class="mb-3">
+                    <label class="form label" for="price">Campspot price</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="price-label">$</span>
+                        <input type="text" class="form-control" id="price" placeholder="0.00" 
+                               aria-label="price" aria-describedby="price-label" name="campspot[price]" value="<%=campspot.price%>">
+                    </div>
+                </div>
+               
+
+    
+
+                <div class="mb-3">
+                    <h5>Image URL</h5>
+                    <label class="form label" for="image"></label>
+                    <input class="form control" type="text" id="image" name="campspot[image]" value="<%=campspot.image%>">
+                </div>
+    
+
+
+
+                <div class="mb-3">
+                    <h5>Description</h5>
+                    <label class="form label" for="description"></label>
+                    <textarea class="form control" type="text" id="description" name="campspot[description]"><%=campspot.description%></textarea>
+                </div>
+    
+
+
+
+                <div class="mb-3">
+                    <button class="btn btn-info">UpdatecampSpot</button>
+                </div>
+                
+            </form>
+            <!-- Recall: index/campspots  -->
+            <a href="/campspots/<%= campspot._id %>">Back to campspot</a>
+        </div>
+    </div>
