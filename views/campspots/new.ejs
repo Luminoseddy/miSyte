@@ -1,66 +1,105 @@
 <%layout('../layouts/boilerPlate')%>
-<div class="row">
-    <h1 class="text-center">New Camping Spots</h1>
-    <div class="col-6 offset-3">
-        <!-- Sending POST request.  -->
-        <form action="/campspots" method="POST">
+    <div class="row">
+        <h1 class="text-center">New Camping Spots</h1>
+        <div class="col-6 offset-3">
+            <!-- Sending POST request.  -->
+            <form action="/campspots" method="POST" novalidate class="validated-form">
 
 
-            <div class="mb-3">
-                <h5>Title</h5>
-                <label class="form label" for="title"></label>
-                <!-- Everything under req.body will be stored in campspot title  -->
-                <input class="form control" type="text" id="title" name="campspot[title]"></label>
-            </div>
+                <div class="mb-3">
+                    <h5>Title</h5>
+                    <label class="form label" for="title"></label>
+                    <!-- Everything under req.body will be stored in campspot title  -->
+                    <input class="form control" type="text" id="title" name="campspot[title]" required>
+
+                    <!-- Display green text when valid data is entered  -->
+                    <div class="valid-feedback">Good data :) </div>
 
 
-
-
-            <div class="mb-3">
-                <h5>Location</h5>
-                <label class="form label" for="location"></label>
-                <input class="form control" type="text" id="location" name="campspot[location]">
-            </div> 
-
-
-
-
-
-            <div class="mb-3">
-                <label class="form label" for="price">Campspot price</label>
-                <div class="input-group">
-                    <span class="input-group-text" id="basic-addon1">$</span>
-                    <input type="text" class="form-control" id="price" placeholder="0.00" 
-                           aria-label="price" aria-describedby="price-label" name="campspot[price]">
                 </div>
-            </div>
-           
-
-
-            <div class="mb-3">
-                <h5>Image URL</h5>
-                <label class="form label" for="image"></label>
-                <input class="form control" type="text" id="image" name="campspot[image]">
-            </div>
 
 
 
 
-            <div class="mb-3">
-                <h5>Description</h5>
-                <label class="form label" for="description"></label>
-                <textarea class="form control" type="text" id="description" name="campspot[description]"></textarea>
-            </div>
+                <div class="mb-3">
+                    <h5>Location</h5>
+                    <label class="form label" for="location"></label>
+                    <input class="form control" type="text" id="location" name="campspot[location]" required>
+                    <div class="valid-feedback">Good data :) </div>
+                </div>
 
 
 
-            <div class="mb-3">
-                <button class="btn btn-success">Add campSpot</button>
-            </div>
-            
+                <div class="mb-3">
+                    <h5>Image URL</h5>
+                    <label class="form label" for="image"></label>
+                    <input class="form control" type="text" id="image" name="campspot[image]">
+                    <div class="valid-feedback">Good data :) </div>
+                </div>
 
-        </form>
-        <!-- Recall: index/campspots  -->
-        <a href="/campspots">List All Camps</a>
+
+
+
+
+                <div class="mb-3">
+                    <label class="form label" for="price">Campspot price</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">$</span>
+                        <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
+                            aria-describedby="price-label" name="campspot[price]">
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+                <div class="mb-3">
+                    <h5>Description</h5>
+                    <label class="form label" for="description"></label>
+                    <textarea class="form control" type="text" id="description" name="campspot[description]"
+                        required></textarea>
+                    <div class="valid-feedback">Good data :) </div>
+                </div>
+
+
+
+                <div class="mb-3">
+                    <button class="btn btn-success">Add campSpot</button>
+                </div>
+
+
+            </form>
+            <!-- Recall: index/campspots  -->
+            <a href="/campspots">List All Camps</a>
+        </div>
     </div>
-</div>
+
+
+
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.validated-form')
+
+        // Loop over them and prevent submission
+        Array.from(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
