@@ -3,6 +3,9 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate_Engine = require('ejs-mate');
 const Joi = require('joi');
+
+const {campspotSchema } = require('./schema.js');
+
 const catchAsync = require('./utilities/catchAsync');
 const methodOverride = require('method-override'); // from Express
 const ExpressError = require('./utilities/catchAsync');
@@ -37,6 +40,24 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method')); // query string we use will be '_method', allows us to use 'PUT'
 
+
+const validateCampspot = (req, res, next) => {
+
+    // validate with req.body.
+    const { error } = campspotSchema.validate(req.body);
+    if(error){ // then we map over over every error.detail message.
+        const msg = error.details.map(el = el.message).join(',');
+        throw new ExpressError(msg, 400); // When caught, gets thrown to app.use(a, b, c, next);
+    }else{
+        next();
+    }
+    console.log(result);
+}
+
+
+
+
+
 app.get('/', (req, res) => {
     res.render('home');
 })
@@ -50,25 +71,9 @@ app.get('/campspots/new', (req, res) => {
     res.render('campspots/new');
 })
 
-app.post('/campspots', catchAsync(async(req, res, next) => {
-    // if(!req.body.campspot) throw new ExpressError('Invalid camp spot data.', 404); // Infrastructure set up. 
-
-    // SCHEMA DEFINED
-    const campspotSchema = Joi.object({
-        campspot: Joi.object().required()({
-            title: Joi.string().required(),
-            price: Joi.number().required.min(0),
-            image: Joi.string().required(),
-            location: Joi.string.required(),
-            description: Joi.string().required()
-        }).required()
-    }) 
-    const { error } = campspotSchema.validate(req.body);
-    if(error){ // then we map over 
-        const msg = error.details.map(el = el.message).join(',');
-        throw new ExpressError(msg, 400); // When caught, gets thrown to app.use(a, b, c, next);
-    }
-    console.log(result);
+// POST request makes a new campspot.
+app.post('/campspots', validateCampground, catchAsync(async(req, res, next) => {
+    // if(!req.body.campspot) throw new ExpressError('Invalid camp spot data.', 404); 
     const campspot = new Campspot(req.body.campspot); // empty by default.
     await campspot.save();
     res.redirect(`/campspots/${campspot._id}`);  
@@ -88,8 +93,7 @@ app.get('/campspots/:id/edit', catchAsync(async (req, res) => {
 app.put('/campspots/:id', catchAsync(async (req, res) => {
     // res.send("Testing app.put request /:id")
     const { id } = req.params;
-    // Spread operator '...'
-    const campspot = await Campspot.findByIdAndUpdate(id, { ...req.body.campspot });
+    const campspot = await Campspot.findByIdAndUpdate(id, { ...req.body.campspot }); // Spread operator '...'
     res.redirect(`/campspots/${campspot._id}`)
 }))
 
