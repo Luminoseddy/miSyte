@@ -3,7 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate_Engine = require('ejs-mate');
 
-const {campspotSchema } = require('./schemas.js');
+const {campspotSchema, reviewSchema } = require('./schemas.js');
 
 const catchAsync = require('./utilities/catchAsync');
 const ExpressError = require('./utilities/catchAsync');
@@ -45,19 +45,31 @@ app.use(methodOverride('_method')); // query string we use will be '_method', al
 const validateCampspot = (req, res, next) => {
 
     // validate with req.body.
-    const { error } = campspotSchema.validate(req.body);
+    const { error } = reviewSchema.validate(req.body);
+
     if(error){ // then we map over over every error.detail message.
         const msg = error.details.map(el = el.message).join(',');
         throw new ExpressError(msg, 400); // When caught, gets thrown to app.use(a, b, c, next);
     }else{
         next();
     }
-    console.log(result);
+    // console.log(result);
 }
 
 
 
 
+
+const validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
+    if(error){ 
+        // then we map over over every error.detail message.
+        const msg = error.details.map(el = el.message).join(',')
+        throw new ExpressError(msg, 400); // When caught, gets thrown to app.use(a, b, c, next);
+    }else{
+        next();
+    }
+}
 
 app.get('/', (req, res) => {
     res.render('home');
@@ -116,14 +128,16 @@ app.delete('/campspots/:id', catchAsync(async (req, res) => {
 //     res.send(camp);
 // })
 
-app.post('/campspots/:id/reviews', catchAsync(async(req, res) => {
+app.post('/campspots/:id/reviews', validateReview, catchAsync(async(req, res) => {
     // res.send("We made it, post request succeeded.")
-    const campspot = await Campground.findById(req.params.id);
+    const campspot = await Campspot.findById(req.params.id);
     const review = new Review(req.body.review);
     campspot.reviews.push(review); //recall reviews property from campspot.js
 
     await review.save();
     await campspot.save();
+
+    res.redirect(`/campspots/${campspot._id}`);
 }))
 
 
