@@ -3,11 +3,12 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate_Engine = require('ejs-mate');
 
-const {campspotSchema } = require('./schema.js');
+const {campspotSchema } = require('./schemas.js');
 
 const catchAsync = require('./utilities/catchAsync');
-const methodOverride = require('method-override'); // from Express
 const ExpressError = require('./utilities/catchAsync');
+const methodOverride = require('method-override'); // from Express
+
 const Campspot = require('./models/campspot');
 
 
@@ -71,7 +72,7 @@ app.get('/campspots/new', (req, res) => {
 })
 
 // POST request makes a new campspot.
-app.post('/campspots', validateCampground, catchAsync(async(req, res, next) => {
+app.post('/campspots', validateCampspot, catchAsync(async(req, res, next) => {
     // if(!req.body.campspot) throw new ExpressError('Invalid camp spot data.', 404); 
     const campspot = new Campspot(req.body.campspot); // empty by default.
     await campspot.save();
@@ -113,6 +114,8 @@ app.delete('/campspots/:id', catchAsync(async (req, res) => {
 //     await camp.save();
 //     res.send(camp);
 // })
+
+app.post('/campspots/:id/reviews')
 
 
 // Only runs if nothing else was matched first.
