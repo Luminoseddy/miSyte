@@ -10,6 +10,7 @@ const ExpressError = require('./utilities/catchAsync');
 const methodOverride = require('method-override'); // from Express
 
 const Campspot = require('./models/campspot');
+const Review = require('./models/review');
 
 
 
@@ -115,7 +116,15 @@ app.delete('/campspots/:id', catchAsync(async (req, res) => {
 //     res.send(camp);
 // })
 
-app.post('/campspots/:id/reviews')
+app.post('/campspots/:id/reviews', catchAsync(async(req, res) => {
+    // res.send("We made it, post request succeeded.")
+    const campspot = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campspot.reviews.push(review); //recall reviews property from campspot.js
+
+    await review.save();
+    await campspot.save();
+}))
 
 
 // Only runs if nothing else was matched first.
