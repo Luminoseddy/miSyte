@@ -6,7 +6,7 @@ const ejsMate_Engine = require('ejs-mate');
 const {campspotSchema, reviewSchema } = require('./schemas.js');
 
 const catchAsync = require('./utilities/catchAsync');
-const ExpressError = require('./utilities/catchAsync');
+const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override'); // from Express
 
 const Campspot = require('./models/campspot');
@@ -41,12 +41,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method')); // query string we use will be '_method', allows us to use 'PUT'
 
-
 const validateCampspot = (req, res, next) => {
-
     // validate with req.body.
     const { error } = reviewSchema.validate(req.body);
-
     if(error){ // then we map over over every error.detail message.
         const msg = error.details.map(el = el.message).join(',');
         throw new ExpressError(msg, 400); // When caught, gets thrown to app.use(a, b, c, next);
@@ -55,11 +52,6 @@ const validateCampspot = (req, res, next) => {
     }
     // console.log(result);
 }
-
-
-
-
-
 const validateReview = (req, res, next) => {
     const { error } = reviewSchema.validate(req.body);
     if(error){ 
@@ -104,14 +96,12 @@ app.get('/campspots/:id/edit', catchAsync(async (req, res) => {
     res.render('campspots/edit', { campspot }); // take 'campspot' and pass it down to /edit
 }))
 
-app.put('/campspots/:id', catchAsync(async (req, res) => {
+app.put('/campspots/:id', validateCampspot, catchAsync(async (req, res) => {
     // res.send("Testing app.put request /:id")
     const { id } = req.params;
     const campspot = await Campspot.findByIdAndUpdate(id, { ...req.body.campspot }); // Spread operator '...'
     res.redirect(`/campspots/${campspot._id}`)
 }))
-
-
 
 // A form sends a post request to this url, and fake out express, to make it seem its a delete request
 // because of method-override
@@ -138,7 +128,15 @@ app.post('/campspots/:id/reviews', validateReview, catchAsync(async(req, res) =>
     await review.save();
     await campspot.save();
 
-    res.redirect(`/campspots/${campspot._id}`);
+    res.redirect(`/campspots/${campspot._id}/:id`);
+}))
+
+app.delete('/campspots/:id/reviews/:reviewId', catchAsync(async(req, res) => {
+    const {id, reviewId } = req.params;
+    Campspot.findByIdAndUpdate(id, {$pull: {reviews: reviewId}}); // review is an array of id's
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campspots/${id}`);
+    // res.send("Delete me")
 }))
 
 

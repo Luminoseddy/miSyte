@@ -1,7 +1,7 @@
 <% layout('../layouts/boilerPlate')%>
 
 <div class="row">
-    <div class="col-6 offset-3">
+    <div class="col-6">
         <div class="card mb-3" >
             <img src="<%= campspot.image %>" class="card-img-top" alt="...">
 
@@ -28,38 +28,37 @@
             <div class="card-footer text-muted">
                 19 days ago
             </div>
-
-
-
-
-            <h2>POST a review of yuour experience!</h2>
-            <form action="/campspots/<%=campspot._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
-              <div class="mb-3">
-                <label class="form-label" for="rating">Rating</label>
-                <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating"> 
-              </div>
-
-                <div class="mb-3">
-                  <label class ="form-label" for="body">Review</label>
-                  <textarea class ="form-control" name="review[body]" id="body" cols="30" rows="10"></textarea>
-                  <div class="valid-feedback">Good data :) </div>
-                </div>
-            <button class="btn btn-success">Submit</button>
-            </form>
-
-            <% for(let review of campspot.reviews) { %>
-            <div class="mb-3">
-              <p> <%= review.body %> </p>
-              <% } %> 
-            </div>
-
-
           </div>
     </div>
+
+    <div class="col-6">
+      <h2>Share your experience</h2>
+      <form action="/campspots/<%=campspot._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
+        <div class="mb-3">
+          <label class="form-label" for="rating">Rating</label>
+          <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating"> 
+        </div>
+
+          <div class="mb-3">
+            <label class ="form-label" for="body">Review</label>
+            <textarea class ="form-control" name="review[body]" id="body" cols="30" rows="10"></textarea>
+            <div class="valid-feedback">Good data :) </div>
+          </div>
+          <button class="btn btn-success">Submit</button>
+      </form>
+
+      <% for(let review of campspot.reviews) { %>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title"> Rating: <%= review.rating %>  </h5>
+            <p class="card-text"> Review <%= review.body %></p>
+          </div>
+        </div>
+    </div>
+      <% } %>     
+  </div>
 </div>
 
-<footer>
-    <!-- <a href="/campspots/ <%= campspot._id%>/edit">Edit</a> -->
-    <!-- <a href="/campspots/">Back to All campspots</a> -->
-</footer>
+
+
 

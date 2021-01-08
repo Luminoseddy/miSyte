@@ -7,13 +7,24 @@ const CampspotSchema = new Schema({
     price: Number,
     description: String,
     location: String,
-
     reviews: [
         {
-        type: Schema.Types.ObjectId,
-        ref: 'Review'
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
         }
-]
+    ]   
+});
+
+// Query middleware:  passes in a document that it found, to the function
+CampspotSchema.post('findOneAndDelete', async function(doc) {
+    console.log("deletion complete");
+    if(doc){
+        await Review.deleteMany({
+            _id:{
+                $in: doc.reviews
+            }
+        })
+    }
 })
 
 //export and compile.
