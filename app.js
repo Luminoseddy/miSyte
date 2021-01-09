@@ -2,14 +2,11 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate_Engine = require('ejs-mate');
-const {campspotSchema, reviewSchema } = require('./schemas.js');
-const catchAsync = require('./utilities/catchAsync');
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override'); // from Express
-const Review = require('./models/review');
-
 const campspots = require('./routes/campspots');
 const reviews = require('./routes/reviews');
+
 
 
 
@@ -41,7 +38,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method')); // query string we use will be '_method', allows us to use 'PUT'
 
 
-    if(error){ 
 
 // Path to pre-fix links to start with this path. 
 app.use('/campspots', campspots);
