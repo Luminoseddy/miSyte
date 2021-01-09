@@ -1,9 +1,7 @@
 <%layout('../layouts/boilerPlate')%>
     <!-- All of the content below gets added into body of class boilerplate.ejs  -->
     <h1>All the camps spots found here.</h1>
-    <div>
-        <a href="/campspots/new">Add new spot</a>
-    </div>
+ 
     <ul>
         <% for (let campspot of campspots) {%>
             <div class="card" mb-3>

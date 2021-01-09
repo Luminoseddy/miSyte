@@ -14,7 +14,8 @@ const reviews = require('./routes/reviews');
 mongoose.connect('mongodb://localhost:27017/main-base', {
     useNewUrlParser: true, // https://mongoosejs.com/docs/deprecations.html
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false,
 });
 
 // =============================================================================
@@ -36,6 +37,7 @@ app.set('views', path.join(__dirname, 'views'));
 //Parse the body
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method')); // query string we use will be '_method', allows us to use 'PUT'
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 
