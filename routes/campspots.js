@@ -1,21 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utilities/catchAsync');
-const {campspotSchema, reviewSchema } = require('./schemas.js');
-
-
+const {campspotSchema, reviewSchema } = require('../schemas.js');
 const ExpressError = require('../utilities/ExpressError');
 const Campspot = require('../models/campspot');
-
-
-router.get('/', catchAsync(async (req, res) => {
-    const campspots = await Campspot.find({});
-    res.render('campspots/index', { campspots }) // campspots is how we render it inside index.js
-}))
-
-router.get('/new', (req, res) => {
-    res.render('campspots/new');
-})
 
 const validateCampspot = (req, res, next) => {
     // validate with req.body.
@@ -28,6 +16,15 @@ const validateCampspot = (req, res, next) => {
     }
     // console.log(result);
 }
+
+router.get('/', catchAsync(async (req, res) => {
+    const campspots = await Campspot.find({});
+    res.render('campspots/index', { campspots }) // campspots is how we render it inside index.js
+}))
+
+router.get('/new', (req, res) => {
+    res.render('campspots/new');
+})
 
 
 // CREATES a new campspot.

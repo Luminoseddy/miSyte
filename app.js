@@ -6,10 +6,10 @@ const {campspotSchema, reviewSchema } = require('./schemas.js');
 const catchAsync = require('./utilities/catchAsync');
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override'); // from Express
-const Campspot = require('./models/campspot');
 const Review = require('./models/review');
 
 const campspots = require('./routes/campspots');
+const reviews = require('./routes/reviews');
 
 
 
@@ -41,24 +41,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method')); // query string we use will be '_method', allows us to use 'PUT'
 
 
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
     if(error){ 
-        // then we map over over every error.detail message.
-        const msg = error.details.map(el = el.message).join(',')
-        throw new ExpressError(msg, 400); // When caught, gets thrown to app.use(a, b, c, next);
-    }else{
-        next();
-    }
-}
 
 // Path to pre-fix links to start with this path. 
 app.use('/campspots', campspots);
 
+app.use('/campspots/:id/reviews', reviews);
+
 app.get('/', (req, res) => {
     res.render('home');
 })
-
 
 // recall async returns a promise that guarantees a resolve
 // app.get('/makecampspot', async (req, res) => {
@@ -68,27 +60,6 @@ app.get('/', (req, res) => {
 //     res.send(camp);
 // })
 
-app.post('/campspots/:id/reviews', validateReview, catchAsync(async(req, res) => {
-    // res.send("We made it, post request succeeded.")
-    const campspot = await Campspot.findById(req.params.id);
-    const review = new Review(req.body.review);
-    campspot.reviews.push(review); //recall reviews property from campspot.js
-
-    await review.save();
-    await campspot.save();
-
-    res.redirect(`/campspots/${campspot._id}/:id`);
-}))
-
-app.delete('/campspots/:id/reviews/:reviewId', catchAsync(async(req, res) => {
-    const {id, reviewId } = req.params;
-    Campspot.findByIdAndUpdate(id, {$pull: {reviews: reviewId}}); // review is an array of id's
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/campspots/${id}`);
-    // res.send("Delete me")
-}))
-
-
 // Only runs if nothing else was matched first.
 // This error handler uses next() and calls the next function
 app.all('*', (req, res, next) => {
@@ -97,7 +68,7 @@ app.all('*', (req, res, next) => {
 
 app.use((err, req, res, next) =>{
     // Destructor from err. extracting a variable from err, and giving the variable a default.
-    const { statusCode=500, message='Shits going down.' } = err;
+    const { statusCode=500 } = err;
     res.status(statusCode).render('error', { err} )
 })
 
