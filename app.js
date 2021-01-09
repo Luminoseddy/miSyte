@@ -2,15 +2,14 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate_Engine = require('ejs-mate');
-
 const {campspotSchema, reviewSchema } = require('./schemas.js');
-
 const catchAsync = require('./utilities/catchAsync');
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override'); // from Express
-
 const Campspot = require('./models/campspot');
 const Review = require('./models/review');
+
+const campspots = require('./routes/campspots');
 
 
 
@@ -41,17 +40,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method')); // query string we use will be '_method', allows us to use 'PUT'
 
-const validateCampspot = (req, res, next) => {
-    // validate with req.body.
-    const { error } = reviewSchema.validate(req.body);
-    if(error){ // then we map over over every error.detail message.
-        const msg = error.details.map(el = el.message).join(',');
-        throw new ExpressError(msg, 400); // When caught, gets thrown to app.use(a, b, c, next);
-    }else{
-        next();
-    }
-    // console.log(result);
-}
+
 const validateReview = (req, res, next) => {
     const { error } = reviewSchema.validate(req.body);
     if(error){ 
@@ -63,53 +52,13 @@ const validateReview = (req, res, next) => {
     }
 }
 
+// Path to pre-fix links to start with this path. 
+app.use('/campspots', campspots);
+
 app.get('/', (req, res) => {
     res.render('home');
 })
 
-app.get('/campspots', catchAsync(async (req, res) => {
-    const campspots = await Campspot.find({});
-    res.render('campspots/index', { campspots }) // campspots is how we render it inside index.js
-}))
-
-app.get('/campspots/new', (req, res) => {
-    res.render('campspots/new');
-})
-
-// POST request makes a new campspot.
-app.post('/campspots', validateCampspot, catchAsync(async(req, res, next) => {
-    // if(!req.body.campspot) throw new ExpressError('Invalid camp spot data.', 404); 
-    const campspot = new Campspot(req.body.campspot); // empty by default.
-    await campspot.save();
-    res.redirect(`/campspots/${campspot._id}`);  
-}));
-
-// Show page
-app.get('/campspots/:id', catchAsync(async(req, res,) => {
-    const campspot = await Campspot.findById(req.params.id).populate('reviews');
-    console.log(campspot);
-    res.render('campspots/show', { campspot });
-}));
-
-app.get('/campspots/:id/edit', catchAsync(async (req, res) => {
-    const campspot = await Campspot.findById(req.params.id);
-    res.render('campspots/edit', { campspot }); // take 'campspot' and pass it down to /edit
-}))
-
-app.put('/campspots/:id', validateCampspot, catchAsync(async (req, res) => {
-    // res.send("Testing app.put request /:id")
-    const { id } = req.params;
-    const campspot = await Campspot.findByIdAndUpdate(id, { ...req.body.campspot }); // Spread operator '...'
-    res.redirect(`/campspots/${campspot._id}`)
-}))
-
-// A form sends a post request to this url, and fake out express, to make it seem its a delete request
-// because of method-override
-app.delete('/campspots/:id', catchAsync(async (req, res) => {
-    const { id } = req.params;
-    await Campspot.findByIdAndDelete(id);
-    res.redirect('/campspots');
-}));
 
 // recall async returns a promise that guarantees a resolve
 // app.get('/makecampspot', async (req, res) => {
@@ -154,4 +103,11 @@ app.use((err, req, res, next) =>{
 
 app.listen(3000, () => {
     console.log('\nRunning from port 3000 ... ');
-})
+}) 
+
+
+
+
+
+
+
