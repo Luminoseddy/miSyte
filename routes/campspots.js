@@ -38,22 +38,49 @@ router.post('/', validateCampspot, catchAsync(async(req, res, next) => {
     res.redirect(`/campspots/${campspot._id}`);  // After flash, redirect
 }));
 
+
+
+
+
+
 // Show route handler page
 router.get('/:id', catchAsync(async(req, res,) => {
     const campspot = await Campspot.findById(req.params.id).populate('reviews');
-    console.log(campspot);
-    res.render('campspots/show', { campspot, msg });
+    // console.log(campspot);
+    if(!campspot){
+        req.flash('error', "Campground can't be found. Bug will be fixed by the dev team. Come back later. :)");
+        return res.redirect('/campspots');
+    }
+    // Otherwise we render /show
+    res.render('campspots/show', { campspot });
 }));
+
+
+
+
+
 
 router.get('/:id/edit', catchAsync(async (req, res) => {
     const campspot = await Campspot.findById(req.params.id);
+    if(!campspot){
+        req.flash('error', "Campground can't be found. Bug will be fixed by the dev team. Come back later. :)");
+        return res.redirect('/campspots');
+    }
     res.render('campspots/edit', { campspot }); // take 'campspot' and pass it down to /edit
 }))
 
+
+
+
+
+
+
+// UPDATE Route.
 router.put('/:id', validateCampspot, catchAsync(async (req, res) => {
     // res.send("Testing app.put request /:id")
     const { id } = req.params;
     const campspot = await Campspot.findByIdAndUpdate(id, { ...req.body.campspot }); // Spread operator '...'
+    req.flash('success', 'Content has been updated. Great!');
     res.redirect(`/campspots/${campspot._id}`)
 }))
 
@@ -62,6 +89,8 @@ router.put('/:id', validateCampspot, catchAsync(async (req, res) => {
 router.delete('/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campspot.findByIdAndDelete(id);
+    req.flash('success', "Campspot successfully Deleted! :(")
+
     res.redirect('/campspots');
 }));
 

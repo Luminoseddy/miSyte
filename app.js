@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const ejsMate_Engine = require('ejs-mate');
 const session = require('express-session');
 const flash = require('connect-flash');
+
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override'); // from Express
 
@@ -31,7 +32,6 @@ db.once("open", () => {
 // =============================================================================
 
 const app = express();
-
 app.engine('ejs', ejsMate_Engine);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
