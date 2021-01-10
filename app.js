@@ -3,6 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate_Engine = require('ejs-mate');
 const session = require('express-session');
+const flash = require('connect-flash');
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override'); // from Express
 
@@ -50,12 +51,19 @@ const sessionConfig = {
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }
-app.use(session(sessionConfig));
 
+app.use(session(sessionConfig));
+app.use(flash());
+
+// Every single request, take whats in flash under success, and have access locally with key 'success'.
+app.use((req, res, next) => {
+    req.locals.success = req.flash('success');
+    req.locals.error = req.flash('error');
+    next();
+})
 
 // Path to pre-fix links to start with this path. 
 app.use('/campspots', campspots);
-
 app.use('/campspots/:id/reviews', reviews);
 
 app.get('/', (req, res) => {

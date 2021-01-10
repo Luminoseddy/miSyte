@@ -30,17 +30,19 @@ router.get('/new', (req, res) => {
 
 // CREATES a new campspot.
 router.post('/', validateCampspot, catchAsync(async(req, res, next) => {
+
     // if(!req.body.campspot) throw new ExpressError('Invalid camp spot data.', 404); 
     const campspot = new Campspot(req.body.campspot); // empty by default.
     await campspot.save();
-    res.redirect(`/campspots/${campspot._id}`);  
+    req.flash('success', 'New campspot posted successfully! Thank you'); // After save, process flash
+    res.redirect(`/campspots/${campspot._id}`);  // After flash, redirect
 }));
 
-// Show page
+// Show route handler page
 router.get('/:id', catchAsync(async(req, res,) => {
     const campspot = await Campspot.findById(req.params.id).populate('reviews');
     console.log(campspot);
-    res.render('campspots/show', { campspot });
+    res.render('campspots/show', { campspot, msg });
 }));
 
 router.get('/:id/edit', catchAsync(async (req, res) => {
