@@ -5,7 +5,9 @@ const {campspotSchema, reviewSchema } = require('../schemas.js');
 const ExpressError = require('../utilities/ExpressError');
 const Campspot = require('../models/campspot');
 
+//Executes when EDITING and then UPDATE
 const validateCampspot = (req, res, next) => {
+    console.log("VALIDATE CAMPSPOT SUCCEEDS.");
     // validate with req.body.
     const { error } = reviewSchema.validate(req.body);
     if(error){ // then we map over over every error.detail message.
@@ -14,7 +16,6 @@ const validateCampspot = (req, res, next) => {
     }else{
         next();
     }
-    // console.log(result);
 }
 
 router.get('/', catchAsync(async (req, res) => {

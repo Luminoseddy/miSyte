@@ -2,12 +2,13 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate_Engine = require('ejs-mate');
+const session = require('express-session');
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override'); // from Express
+
+
 const campspots = require('./routes/campspots');
 const reviews = require('./routes/reviews');
-
-
 
 
 // local development database. 
@@ -39,6 +40,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method')); // query string we use will be '_method', allows us to use 'PUT'
 app.use(express.static(path.join(__dirname, 'public')));
 
+const sessionConfig = {
+    secret: 'thisshouldbeabetterSecret dude.',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+app.use(session(sessionConfig));
 
 
 // Path to pre-fix links to start with this path. 

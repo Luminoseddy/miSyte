@@ -23,6 +23,8 @@ const validateReview = (req, res, next) => {
 
 
 
+
+
 router.post('/', validateReview, catchAsync(async(req, res) => {
     // res.send("We made it, post request succeeded.")
     const campspot = await Campspot.findById(req.params.id);
