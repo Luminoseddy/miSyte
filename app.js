@@ -7,6 +7,9 @@ const flash = require('connect-flash');
 
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override'); // from Express
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
 const campspots = require('./routes/campspots');
 const reviews = require('./routes/reviews');
@@ -53,12 +56,22 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate())); // hello passport, use localStrategy
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(UJser.deserializeUser());
+
 // Every single request, take whats in flash under success, and have access locally with key 'success'.
 app.use((req, res, next) => {
     req.locals.success = req.flash('success');
     req.locals.error = req.flash('error');
     next();
 })
+
+
+
 
 // Path to pre-fix links to start with this path. 
 app.use('/campspots', campspots);
