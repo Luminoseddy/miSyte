@@ -27,7 +27,6 @@ router.get('/new', (req, res) => {
     res.render('campspots/new');
 })
 
-
 // CREATES a new campspot.
 router.post('/', validateCampspot, catchAsync(async(req, res, next) => {
 
@@ -37,11 +36,6 @@ router.post('/', validateCampspot, catchAsync(async(req, res, next) => {
     req.flash('success', 'New campspot posted successfully! Thank you'); // After save, process flash
     res.redirect(`/campspots/${campspot._id}`);  // After flash, redirect
 }));
-
-
-
-
-
 
 // Show route handler page
 router.get('/:id', catchAsync(async(req, res,) => {
@@ -55,11 +49,6 @@ router.get('/:id', catchAsync(async(req, res,) => {
     res.render('campspots/show', { campspot });
 }));
 
-
-
-
-
-
 router.get('/:id/edit', catchAsync(async (req, res) => {
     const campspot = await Campspot.findById(req.params.id);
     if(!campspot){
@@ -68,12 +57,6 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
     }
     res.render('campspots/edit', { campspot }); // take 'campspot' and pass it down to /edit
 }))
-
-
-
-
-
-
 
 // UPDATE Route.
 router.put('/:id', validateCampspot, catchAsync(async (req, res) => {
@@ -92,7 +75,6 @@ router.delete('/:id', catchAsync(async (req, res) => {
     req.flash('success', "Campspot successfully Deleted! :(")
 
     res.redirect('/campspots');
-}));
-
-module.exports = router;
-
+})); 
+ 
+module.exports = router;           

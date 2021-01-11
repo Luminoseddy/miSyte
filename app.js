@@ -8,10 +8,8 @@ const flash = require('connect-flash');
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override'); // from Express
 
-
 const campspots = require('./routes/campspots');
 const reviews = require('./routes/reviews');
-
 
 // local development database. 
 mongoose.connect('mongodb://localhost:27017/main-base', {
