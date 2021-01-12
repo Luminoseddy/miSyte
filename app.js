@@ -7,12 +7,19 @@ const flash = require('connect-flash');
 
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override'); // from Express
+
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 
-const campspots = require('./routes/campspots');
-const reviews = require('./routes/reviews');
+
+const userRoutes = require('./routes/users');
+const campspotRoutes = require('./routes/campspots');
+const reviewRoutes = require('./routes/reviews');
+
+
+
+
 
 // local development database. 
 mongoose.connect('mongodb://localhost:27017/main-base', {
@@ -43,7 +50,7 @@ app.use(methodOverride('_method')); // query string we use will be '_method', al
 app.use(express.static(path.join(__dirname, 'public')));
 
 const sessionConfig = {
-    secret: 'thisshouldbeabetterSecret dude.',
+    secret: 'thisshouldbeabetterSecret dude.', 
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -57,11 +64,11 @@ app.use(session(sessionConfig));
 app.use(flash());
 
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session()); // Check out passport docs for more info eddy.
 passport.use(new LocalStrategy(User.authenticate())); // hello passport, use localStrategy
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(UJser.deserializeUser());
+passport.serializeUser(User.serializeUser()); // Tells passport how to serailze a user. 
+passport.deserializeUser(User.deserializeUser());// Tells user how to get out of the session.
 
 // Every single request, take whats in flash under success, and have access locally with key 'success'.
 app.use((req, res, next) => {
@@ -70,12 +77,18 @@ app.use((req, res, next) => {
     next();
 })
 
+app.get('fakeUser', async(req, res) => {
+    const user = new User ({email: 'test@gmail.com', username: 'audmon'})
+    const newUser = User.register(user, 'abc123'); // abc123 is password
+    res.send(newUser);
+})
 
 
 
+app.use('/', userRoutes)
 // Path to pre-fix links to start with this path. 
-app.use('/campspots', campspots);
-app.use('/campspots/:id/reviews', reviews);
+app.use('/campspots', campspotRoutes);
+app.use('/campspots/:id/reviews', reviewRoutes);
 
 app.get('/', (req, res) => {
     res.render('home');

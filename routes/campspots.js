@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utilities/catchAsync');
 const {campspotSchema, reviewSchema } = require('../schemas.js');
+const { isLoggedIn } = require('../middleware');
+
 const ExpressError = require('../utilities/ExpressError');
 const Campspot = require('../models/campspot');
 
@@ -23,12 +25,13 @@ router.get('/', catchAsync(async (req, res) => {
     res.render('campspots/index', { campspots }) // campspots is how we render it inside index.js
 }))
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn,  (req, res) => {
+
     res.render('campspots/new');
 })
 
 // CREATES a new campspot.
-router.post('/', validateCampspot, catchAsync(async(req, res, next) => {
+router.post('/', isLoggedIn, validateCampspot, catchAsync(async(req, res, next) => {
 
     // if(!req.body.campspot) throw new ExpressError('Invalid camp spot data.', 404); 
     const campspot = new Campspot(req.body.campspot); // empty by default.
@@ -49,7 +52,7 @@ router.get('/:id', catchAsync(async(req, res,) => {
     res.render('campspots/show', { campspot });
 }));
 
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit',isLoggedIn, catchAsync(async (req, res) => {
     const campspot = await Campspot.findById(req.params.id);
     if(!campspot){
         req.flash('error', "Campground can't be found. Bug will be fixed by the dev team. Come back later. :)");
@@ -59,7 +62,7 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
 }))
 
 // UPDATE Route.
-router.put('/:id', validateCampspot, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn,validateCampspot, catchAsync(async (req, res) => {
     // res.send("Testing app.put request /:id")
     const { id } = req.params;
     const campspot = await Campspot.findByIdAndUpdate(id, { ...req.body.campspot }); // Spread operator '...'
@@ -69,7 +72,7 @@ router.put('/:id', validateCampspot, catchAsync(async (req, res) => {
 
 // A form sends a post request to this url, and fake out express, to make it seem its a delete request
 // because of method-override
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn,catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campspot.findByIdAndDelete(id);
     req.flash('success', "Campspot successfully Deleted! :(")
