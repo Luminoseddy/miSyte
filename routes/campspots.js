@@ -72,7 +72,7 @@ router.put('/:id', isLoggedIn,validateCampspot, catchAsync(async (req, res) => {
 
 // A form sends a post request to this url, and fake out express, to make it seem its a delete request
 // because of method-override
-router.delete('/:id', isLoggedIn,catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campspot.findByIdAndDelete(id);
     req.flash('success', "Campspot successfully Deleted! :(")
