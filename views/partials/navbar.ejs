@@ -14,9 +14,12 @@
 
             <!-- Will be on the right side of the navbar : ml(margin left)  -->
             <div class="navbar-nav ml-auto">
+                <% if (!currentUser) { %>
                 <a class="nav-link" href="/login">Login</a>
                 <a class="nav-link" href="/register">Register</a>
+                <% else { %> 
                 <a class="nav-link" href="/logout">Logout</a>
+                <% } %>
             </div>
         </div>
     </div>

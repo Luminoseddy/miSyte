@@ -72,8 +72,10 @@ passport.deserializeUser(User.deserializeUser());// Tells user how to get out of
 
 // Every single request, take whats in flash under success, and have access locally with key 'success'.
 app.use((req, res, next) => {
-    req.locals.success = req.flash('success');
-    req.locals.error = req.flash('error');
+    console.log(req.session);
+    res.locals.currentUser = req.user;
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
     next();
 })
 
