@@ -10,9 +10,6 @@ const UserSchema = new Schema({
     }
 });
 
-// Passing in the dependent package.
 UserSchema.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model('User', UserSchema);
-
-// checked 

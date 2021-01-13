@@ -1,11 +1,8 @@
 const Joi = require('joi');
 const { number } = require('joi');
 
-
-    // SCHEMA DEFINED
 module.exports.campspotSchema = Joi.object({
-    campspot: Joi.object(
-    {
+    campspot: Joi.object({
         title: Joi.string().required(),
         price: Joi.number().required().min(0),
         image: Joi.string().required(),
@@ -14,7 +11,6 @@ module.exports.campspotSchema = Joi.object({
     }).required()
 });
 
-
 module.exports.reviewSchema = Joi.object({
     review: Joi.object({
         rating: Joi.number().required().min(1).max(5),
@@ -22,5 +18,3 @@ module.exports.reviewSchema = Joi.object({
     }).required()
 })
 
-
-// CHECKED
