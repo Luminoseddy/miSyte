@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const Review = require('./review')
+const Schema = mongoose.Schema
 
 const CampspotSchema = new Schema({
     title: String,
@@ -29,3 +30,6 @@ CampspotSchema.post('findOneAndDelete', async function(doc) {
 
 //export and compile.
 module.exports = mongoose.model('Campspot', CampspotSchema);
+
+
+// checked 

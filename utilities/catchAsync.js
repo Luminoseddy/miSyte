@@ -7,3 +7,6 @@ module.exports = func => {
         func(req, res, next).catch(next) // executes the function, catches error if any, then passes to next function.
     }
 }
+
+
+// checked 

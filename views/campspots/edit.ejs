@@ -1,75 +1,63 @@
-<%layout('../layouts/boilerPlate')%>
-    <!-- Recall: index/campspots  -->
-    <div class="row">
-        <h1 class="text-center">Edit Mode: Camping Spots</h1>
-        <div class="col-6 offset-3">
-    
-            <!-- Sending POST request; novalidate tells browser to not user browser default validations.  -->
-            <form action="/campspots/<%=campspot._id%>?_method=PUT" method="POST" novalidate class="validated-form">
-                <div class="mb-3">
-                    <h5>Title</h5>
-                    <label class="form label" for="title"></label>
-                        <!-- Everything under req.body will be stored in campspot title  -->
-                        <input class="form control" type="text" id="title" name="campspot[title]" value="<%=campspot.title%>">
-                        <div class="valid-feedback">Good data :) </div>
-                </label>
+<% layout('layouts/boilerplate')%>
+ <!-- Recall: index/campspots  -->
+<div class="row">
+    <h1 class="text-center">Edit Campspot</h1>
+    <div class="col-6 offset-3">
+        <!-- Sending POST request; novalidate tells browser to not user browser default validations.  -->
+        <form action="/campspots/<%=campspot._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+            <div class="mb-3">
+                <label class="form-label" for="title">Title</label>
+                <input class="form-control" type="text" id="title" name="campspot[title]"
+                    value="<%=campspot.title %>" required>
+                <div class="valid-feedback">
+                    Healthy data :)
                 </div>
-    
-
-
-
-                <div class="mb-3">
-                    <h5>Location</h5>
-                    <label class="form label" for="location"></label>
-                    <input class="form control" type="text" id="location" name="campspot[location]" value="<%=campspot.location%>"required>
-                    <div class="valid-feedback">Good data :) </div>
-                </div> 
-
-
-
-
-
-                <div class="mb-3">
-                    <label class="form label" for="price">Campspot price</label>
-                    <div class="input-group">
-                        <span class="input-group-text" id="price-label">$</span>
-                        <input type="text" class="form-control" id="price" placeholder="0.00" 
-                               aria-label="price" aria-describedby="price-label" name="campspot[price]" value="<%=campspot.price%>"required>
-                               <div class="valid-feedback">Good data :) </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="location">Location</label>
+                <input class="form-control" type="text" id="location" name="campspot[location]"
+                    value="<%=campspot.location %>" required>
+                <div class="valid-feedback">
+                    Healthy data :)
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="image">Image Url</label>
+                <input class="form-control" type="text" id="image" name="campspot[image]"
+                    value="<%=campspot.image %>" required>
+                <div class="valid-feedback">
+                    Healthy data :)
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="price">Campspot Price</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="price-label">$</span>
+                    <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
+                        aria-describedby="price-label" name="campspot[price]" value="<%=campspot.price %>"
+                        required>\<div class="valid-feedback">
+                            Healthy data :)
                     </div>
                 </div>
-               
+            </div>
 
-    
-
-                <div class="mb-3">
-                    <h5>Image URL</h5>
-                    <label class="form label" for="image"></label>
-                    <input class="form control" type="text" id="image" name="campspot[image]" value="<%=campspot.image%>"required>
-                    <div class="valid-feedback">Good data :) </div>
+            <div class="mb-3">
+                <label class="form-label" for="description">Description</label>
+                <textarea class="form-control" type="text" id="description" name="campspot[description]"
+                    required><%= campspot.description%></textarea>
+                <div class="valid-feedback">
+                    Looks good!
                 </div>
-    
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-info">Update Campspot</button>
+            </div>
+        </form>
+        <a href="/campspots/<%= campspot._id%>">Back To Campspot</a>
 
-
-
-                <div class="mb-3">
-                    <h5>Description</h5>
-                    <label class="form label" for="description"></label>
-                    <textarea class="form control" type="text" id="description" name="campspot[description]"required><%=campspot.description%></textarea>
-                    <div class="valid-feedback">Good data :) </div>
-                </div>
-    
-
-
-
-                <div class="mb-3">
-                    <button class="btn btn-info">Update</button>
-                </div>
-                
-            </form>
-            <!-- Recall: index/campspots  -->
-            <!-- <a href="/campspots/<%= campspot._id %>">Back to campspot</a> -->
-        </div>
     </div>
+</div>
 
+
+<!-- checked  -->
     

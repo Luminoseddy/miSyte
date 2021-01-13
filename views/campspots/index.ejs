@@ -1,23 +1,28 @@
-<%layout('../layouts/boilerPlate')%>
-    <!-- All of the content below gets added into body of class boilerplate.ejs  -->
-    <h1>All the camps spots found here.</h1>
- 
-    <ul>
-        <% for (let campspot of campspots) {%>
-            <div class="card" mb-3>
-                <div class="row">
-                    <div class="col-md-4">
-                        <img class="img-fluid" alt="" src=" <%=campspot.image%> ">
-                    </div>
-                    <div class="col-md-8">
-                        <h5 class="card-title"> <%=campspot.title%> </h5>
-                        <p class="card-text"> <%=campspot.description%> </p>
-                        <p class="card-text">
-                            <small class="text-muted"> <%=campspot.location%> </small>
-                        </p>
-                        <a class="btn btn-primary" href="/campspots/<%=campspot._id%>">View <%=campspot.title%></a>
-                    </div>
-                </div>
+<% layout('layouts/boilerplate')%>
+
+<!-- All of the content below gets added into body of class boilerplate.ejs  -->
+<h1>All Campspots</h1>
+<div>
+    <a href="/campspots/new">Add Campspot</a>
+</div>
+<% for (let campspot of campspots){%>
+<div class="card" mb-3>
+    <div class="row">
+        <div class="col-md-4">
+            <img class="img-fluid" alt="" src="<%=campspot.image%>">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title"><%= campspot.title %> </h5>
+                <p class="card-text"><%= campspot.description %></p>
+                <p class="card-text">
+                    <small class="text-muted"><%= campspot.location%></small>
+                </p>
+                <a class="btn btn-primary" href="/campspots/<%=campspot._id%>">View <%=campspot.title%></a>
             </div>
-        <% } %>
-    </ul>
+        </div>
+    </div>
+</div>
+<% }%>
+
+<!-- checked  -->

@@ -9,7 +9,7 @@ router.get('/register', (req, res) => {
     res.render('users/register');
 })
 
-router.post('/register', catchAsync(async(req, res) => {
+router.post('/register', catchAsync(async(req, res, next) => {
     try{
         // destructure what we want from req.body
         const { email, username, password } = req.body

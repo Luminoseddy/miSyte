@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utilities/catchAsync');
-const {campspotSchema, reviewSchema } = require('../schemas.js');
+const {campspotSchema } = require('../schemas.js');
 const { isLoggedIn } = require('../middleware');
 
 const ExpressError = require('../utilities/ExpressError');
@@ -11,7 +11,7 @@ const Campspot = require('../models/campspot');
 const validateCampspot = (req, res, next) => {
     console.log("VALIDATE CAMPSPOT SUCCEEDS.");
     // validate with req.body.
-    const { error } = reviewSchema.validate(req.body);
+    const { error } = campSpotSchema.validate(req.body);
     if(error){ // then we map over over every error.detail message.
         const msg = error.details.map(el = el.message).join(',');
         throw new ExpressError(msg, 400); // When caught, gets thrown to app.use(a, b, c, next);
@@ -26,13 +26,11 @@ router.get('/', catchAsync(async (req, res) => {
 }))
 
 router.get('/new', isLoggedIn,  (req, res) => {
-
     res.render('campspots/new');
 })
 
 // CREATES a new campspot.
 router.post('/', isLoggedIn, validateCampspot, catchAsync(async(req, res, next) => {
-
     // if(!req.body.campspot) throw new ExpressError('Invalid camp spot data.', 404); 
     const campspot = new Campspot(req.body.campspot); // empty by default.
     await campspot.save();
@@ -45,7 +43,7 @@ router.get('/:id', catchAsync(async(req, res,) => {
     const campspot = await Campspot.findById(req.params.id).populate('reviews');
     // console.log(campspot);
     if(!campspot){
-        req.flash('error', "Campground can't be found. Bug will be fixed by the dev team. Come back later. :)");
+        req.flash('error', "Campspot can't be found.");
         return res.redirect('/campspots');
     }
     // Otherwise we render /show
@@ -55,7 +53,7 @@ router.get('/:id', catchAsync(async(req, res,) => {
 router.get('/:id/edit',isLoggedIn, catchAsync(async (req, res) => {
     const campspot = await Campspot.findById(req.params.id);
     if(!campspot){
-        req.flash('error', "Campground can't be found. Bug will be fixed by the dev team. Come back later. :)");
+        req.flash('error', "Campspot can't be found.");
         return res.redirect('/campspots');
     }
     res.render('campspots/edit', { campspot }); // take 'campspot' and pass it down to /edit
@@ -76,7 +74,6 @@ router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campspot.findByIdAndDelete(id);
     req.flash('success', "Campspot successfully Deleted! :(")
-
     res.redirect('/campspots');
 })); 
  

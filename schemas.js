@@ -1,4 +1,7 @@
 const Joi = require('joi');
+const { number } = require('joi');
+
+
     // SCHEMA DEFINED
 module.exports.campspotSchema = Joi.object({
     campspot: Joi.object(
@@ -19,3 +22,5 @@ module.exports.reviewSchema = Joi.object({
     }).required()
 })
 
+
+// CHECKED
