@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const catchAsync = require('../utils/catchAsync');
+const catchAsync = require('../utilities/catchAsync');
 const { campspotSchema } = require('../schemas.js');
 const { isLoggedIn } = require('../middleware');
 
-const ExpressError = require('../utils/ExpressError');
+const ExpressError = require('../utilities/ExpressError');
 const Campspot = require('../models/campspot');
 
 const validateCampspot = (req, res, next) => {
