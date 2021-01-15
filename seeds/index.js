@@ -38,6 +38,7 @@ const seedDB = async () => {
         const r = Math.floor(Math.random() * 1000);
         const price = Math.floor(Math.random() * 20) + 10;
         const camp = new Campspot({
+            author: '60003a66e05fb904de248292', // All authors will have this ID
             location: `${cities[r].city}, ${cities[r].state}`,
             title: `${sample(descriptors)} ${sample(places)}`,
             image: 'https://source.unsplash.com/collection/483251',

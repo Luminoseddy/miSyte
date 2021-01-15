@@ -35,7 +35,10 @@ router.post('/', isLoggedIn, validateCampspot, catchAsync(async (req, res, next)
 }))
 
 router.get('/:id', catchAsync(async (req, res,) => {
-    const campspot = await Campspot.findById(req.params.id).populate('reviews');
+    // this now has access to username under key of author.username
+    const campspot = await Campspot.findById(req.params.id).populate('reviews').populate('author');
+    // console.log(campspot);
+    campspot.author = req.user._id;
     if (!campspot) {
         req.flash('error', 'Cannot find that campspot!');
         return res.redirect('/campspots');

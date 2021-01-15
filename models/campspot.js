@@ -9,7 +9,7 @@ const CampspotSchema = new Schema({
     description: String,
     location: String,
     author: {
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId, // refference
         ref: 'User'
     },
     reviews: [
