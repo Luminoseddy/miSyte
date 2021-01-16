@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router({mergeParams: true});
-const { validateReview, isLoggedIn } = require('../middleware'); // From middleware file, call these functions <--
+const { validateReview, isLoggedIn, isReviewAuthor } = require('../middleware'); // From middleware file, call these functions <--
 const Campspot = require('../models/campspot');
 const Review = require('../models/review');
 const ExpressError = require('../utilities/ExpressError');
@@ -23,7 +23,7 @@ router.post('/', validateReview, catchAsync(async(req, res) => {
 
 
 
-router.delete('/:reviewId', catchAsync(async(req, res) => {
+router.delete('/:reviewId', isLoggedin, isReviewAuthor, catchAsync(async(req, res) => {
     const {id, reviewId } = req.params;
     await Campspot.findByIdAndUpdate(id, {$pull: {reviews: reviewId}}); // review is an array of id's
     await Review.findByIdAndDelete(reviewId);

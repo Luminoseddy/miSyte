@@ -1,6 +1,7 @@
 const { campspotSchema, reviewSchema } = require('./schemas.js');
 const ExpressError = require('./utilities/ExpressError');
 const Campspot = require('./models/campspot');
+const review = require('./models/review');
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -31,6 +32,17 @@ module.exports.isAuthor = async(req, res, next) => {
     }
     next(); // Meaning user has access, continue
 }
+
+module.exports.isReviewAuthor = async(req, res, next) => {
+    const { reviewid } = req.params;
+    const review = await Review.findById(reviewid);
+    if(!review.author.equals(req.user._id)){ // Check if its the correct user to do an action delete, edit
+        req.flash('error', "You do not have permission to do that");
+        return res.redirect(`/campspot/${id}`);
+    }
+    next(); // Meaning user has access, continue
+}
+
 
 // This require reviewSchema. 
 module.exports.validateReview = (req, res, next) => {
