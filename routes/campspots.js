@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utilities/catchAsync');
+const { isLoggedIn, isAuthor, validateCampspot } = require('../middleware'); // Destructuring
 
-
-// Destructuring
-const { isLoggedIn, isAuthor, validateCampspot } = require('../middleware');
-
-const ExpressError = require('../utilities/ExpressError');
 const Campspot = require('../models/campspot');
 
 
@@ -26,7 +22,8 @@ router.post('/', isLoggedIn, validateCampspot, catchAsync(async (req, res, next)
     req.flash('success', 'Successfully made a new campspot!');
     res.redirect(`/campspots/${campspot._id}`)
 }))
- 
+
+//Show page
 router.get('/:id', catchAsync(async (req, res,) => {
     // this now has access to username under key of author.username
     const campspot = await Campspot.findById(req.params.id).populate('reviews').populate('author');
