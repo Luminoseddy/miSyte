@@ -13,12 +13,16 @@
                 <li class="list-group-item">Post from: <%= campspot.author.username%></li>
                 <li class="list-group-item">$<%= campspot.price%>/night</li>
             </ul>
-            <div class="card-body">
-                <a class="card-link btn btn-info" href="/campspots/<%=campspot._id%>/edit">Edit</a>
-                <form class="d-inline" action="/campspots/<%=campspot._id%>?_method=DELETE" method="POST">
-                    <button class="btn btn-danger">Delete</button>
-                </form>
-            </div>
+
+            <!-- Checks if the currentUSer exist and currentUser is the ID user.  -->
+            <% if(currentUser && campspot.author.equals(currentUser._id)) { %>
+                <div class="card-body">
+                    <a class="card-link btn btn-info" href="/campspots/<%=campspot._id%>/edit">Edit</a>
+                    <form class="d-inline" action="/campspots/<%=campspot._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            <% } %>
             <div class="card-footer text-muted">
                 19 days ago
             </div>

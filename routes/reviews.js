@@ -1,29 +1,10 @@
 const express = require('express');
 const router = express.Router({mergeParams: true});
-
+const {validateReview} = require('../middleware');
 const Campspot = require('../models/campspot');
 const Review = require('../models/review');
-
-const { reviewSchema } = require('../schemas.js');
-
 const ExpressError = require('../utilities/ExpressError');
 const catchAsync = require('../utilities/catchAsync');
-
-
-
-const validateReview = (req, res, next) => {
-    // validate with req.body.
-    const { error } = reviewSchema.validate(req.body);
-    if(error){ // then we map over over every error.detail message.
-        const msg = error.details.map(el = el.message).join(',');
-        throw new ExpressError(msg, 400); // When caught, gets thrown to app.use(a, b, c, next);
-    }else{
-        next();
-    }
-}
-
-
-
 
 
 router.post('/', validateReview, catchAsync(async(req, res) => {
